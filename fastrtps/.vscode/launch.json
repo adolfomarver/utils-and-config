@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "g++ build and debug active file",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${command:cmake.launchTargetPath}",
+            "args": ["both", "-l", "--xml=/home/adolfo/repos/eprosima/src/fastrtps/test/performance/latency/xml/interprocess_best_effort_large_shm.xml"], // "--gtest_filter=SharedMemTests.send_and_receive_between_ports"
+            "stopAtEntry": false,
+            "cwd": "/home/adolfo/repos/eprosima/src/fastrtps/build/test/blackbox",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}
