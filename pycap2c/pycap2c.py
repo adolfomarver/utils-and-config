@@ -1,5 +1,32 @@
 from scapy.all import *
 from scapy.all import rdpcap
+import re
+
+def addComentarySlash(pcap_text):
+    """ 
+        Add // at the beginning of each line. 
+    """
+    return re.sub(r'(.*\n)', r'//\1', pcap_text)
+
+def getPacketsAsText(pcap_file):
+    try:
+        result = subprocess.run(
+                    f'tshark -r {pcap_file}',
+                    stdout=subprocess.PIPE,
+                    universal_newlines=True,
+                    shell=True
+                )
+
+        if result.returncode != 0:
+            sys.exit(result.returncode)
+
+        return result.stdout
+    except BaseException as e:
+            print(str(e))
+            sys.exit(1)
+
+def generateHeader(pcap_file):
+    return addComentarySlash(getPacketsAsText(pcap_file))
 
 def findLayers(pkt):
     layers = []
@@ -52,8 +79,8 @@ def changeAddresses(pkts, capture_ue_ip, desired_ue_ip, desired_uplink_dst_ip):
                 del pkt[IP].chksum
                 del pkt[TCP].chksum
 
-def main():
-    pkts = rdpcap('sample.pcap')
+def main(pcap_file):
+    pkts = rdpcap(pcap_file)
 
     ue_ip = getFirstSourceIPAddress(pkts)
     print(f'UE IP Addr: {ue_ip}')
@@ -62,5 +89,9 @@ def main():
 
     wrpcap('out.pcap', list(pkts))
 
+    t = generateHeader(pcap_file)
+
+    print('Hello')
+
 if __name__ == "__main__":
-    main()
+    main('sample.pcap')
